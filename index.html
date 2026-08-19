@@ -1,4 +1,7 @@
-<title>heybriz</title>
+<title>heybriz — Tell your computer what to do</title>
+<!-- The one-liner IS the title tag: it is what shows in search results and
+     browser tabs, so the positioning line has to live here, not only in the h1. -->
+<meta name="description" content="heybriz is a voice-first AI assistant for Windows. Say what you need — it searches, clicks and types in the Chrome you're already signed into, and shows you the plan before anything changes." />
 <style>
   :root {
     --ground: #f3f4f6; --panel: #ffffff; --panel-2: #e9ebee;
@@ -78,11 +81,16 @@
   /* demo placeholder — swap for a real recording */
   .demo {
     aspect-ratio: 16 / 9; border: 1px dashed var(--rule); border-radius: 10px;
-    background: var(--panel); margin: 26px 0; display: flex; align-items: center;
-    justify-content: center;
+    background: var(--panel); margin: 26px 0; display: flex; flex-direction: column;
+    gap: 14px; align-items: center; justify-content: center; padding: 24px; text-align: center;
   }
-  .demo span { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em;
-               text-transform: uppercase; color: var(--ink-2); }
+  .demo .say {
+    font-size: clamp(16px, 2.4vw, 20px); font-weight: 560; letter-spacing: -0.01em;
+    max-width: 34ch; text-wrap: balance;
+  }
+  .demo .say::before { content: "🎙 "; }
+  .demo span.tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+                   text-transform: uppercase; color: var(--ink-2); }
 
   .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .btn {
@@ -116,7 +124,7 @@
 
   ol.steps { list-style: none; margin: 0; padding: 0; }
   ol.steps li {
-    display: grid; grid-template-columns: 3.2rem 1fr; gap: 16px;
+    display: grid; grid-template-columns: 5.4rem 1fr; gap: 16px;
     padding: 16px 0; border-top: 1px solid var(--rule);
   }
   ol.steps li:first-child { border-top: 0; padding-top: 0; }
@@ -162,16 +170,27 @@
     </nav>
   </div>
 
+  <!-- Positioning (2026-08-19): we do not sell "AI browser automation" — that
+       category belongs to developer tools (Browser Use, Skyvern) and reads as
+       infrastructure. The hero sells the outcome a person wants: the computer
+       does the thing. Voice leads because it is the differentiator no
+       browser-agent competitor leads with; typing still works and the copy
+       says so — never claim voice is the only way in. -->
   <header class="hero">
     <div class="flag"><span class="dot"></span><span class="label">Early access · Windows 10/11</span></div>
-    <h1>Ask it to look something up.<br />Show it a chore once.</h1>
+    <h1>Tell your computer<br />what to do.</h1>
     <p class="lede">
-      A desktop assistant that works in <b>the Chrome you're already signed into</b> —
-      so it reads what you can read, and works where you're already logged in.
-      ChatGPT, Claude and Gemini, all for $10.
+      heybriz is a voice-first AI assistant for Windows. Say what you need —
+      it searches, clicks and types in <b>the Chrome you're already signed
+      into</b>, and shows you the plan before anything changes.
     </p>
 
-    <div class="demo" aria-hidden="true"><span>Demo video — coming soon</span></div>
+    <!-- Placeholder until the recording lands. The spoken line is already the
+         real demo script, so the page and the video will say the same thing. -->
+    <div class="demo" aria-hidden="true">
+      <p class="say">&ldquo;Find the cheapest direct flight from New York to Seoul this weekend.&rdquo;</p>
+      <span class="tag">Watch it get done — video coming soon</span>
+    </div>
 
     <div class="actions">
       <!-- 설치본은 GitHub Releases 에 둔다. 랜딩 호스트에 100MB 짜리 exe 를
@@ -194,6 +213,36 @@
     </p>
   </header>
 
+  <!-- Speak → Show → Delegate. One verb per step, and each step is a bigger
+       hand-off than the last: say a task, teach a task, own a routine. -->
+  <section id="how">
+    <div class="rule"><span class="label">How it works</span></div>
+    <h2>Speak. Show. Delegate.</h2>
+    <ol class="steps">
+      <li>
+        <span class="k">SPEAK</span>
+        <div>
+          <h3>Say it — or type it</h3>
+          <p>Hold a key, say what you need. Dictation is transcribed on your own PC. It searches, reads the pages itself, and tells you where it got each part.</p>
+        </div>
+      </li>
+      <li>
+        <span class="k">SHOW</span>
+        <div>
+          <h3>Do a chore once, in front of it</h3>
+          <p>It works in the browser you're already in, and learns the task by watching you do it. It shows the plan before anything changes — payments and passwords are refused in code, not by asking nicely.</p>
+        </div>
+      </li>
+      <li>
+        <span class="k">DELEGATE</span>
+        <div>
+          <h3>From then on, it's one sentence</h3>
+          <p>&ldquo;Do the weekly report.&rdquo; The steps you taught it run again — in your browser, with your logins, while you watch.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
   <section id="pledge">
     <div class="rule"><span class="label">The pledge</span></div>
     <h2>You email me. I read it. It's often in the next build.</h2>
@@ -205,34 +254,6 @@
       </p>
       <p class="sig">— building solo, shipping in public. <a href="mailto:hello@heybriz.com">hello@heybriz.com</a></p>
     </div>
-  </section>
-
-  <section id="how">
-    <div class="rule"><span class="label">How it works</span></div>
-    <h2>Ask first. Keep the ones worth keeping.</h2>
-    <ol class="steps">
-      <li>
-        <span class="k">ASK</span>
-        <div>
-          <h3>Ask a question, in plain English</h3>
-          <p>When the answer needs to be current it searches and reads the pages itself, then tells you where it got each part.</p>
-        </div>
-      </li>
-      <li>
-        <span class="k">WATCH</span>
-        <div>
-          <h3>It works in the browser you're already in</h3>
-          <p>Shows the plan before anything changes. Payments and passwords are refused in code, not by asking nicely.</p>
-        </div>
-      </li>
-      <li>
-        <span class="k">KEEP</span>
-        <div>
-          <h3>Turn the good ones into your own workflows</h3>
-          <p>Save the steps once. After that it's one sentence, every time.</p>
-        </div>
-      </li>
-    </ol>
   </section>
 
   <!-- 요금. **아직 확정 전이라 숫자는 하나만 세운다** — 안 정한 것을 정한 척
@@ -283,12 +304,12 @@
       <div>
         <span class="label" style="display:block;margin-bottom:10px;">Works now</span>
         <ul class="set can">
+          <li><span class="m">✓</span><span>Voice input — push to talk, transcribed on your PC</span></li>
           <li><span class="m">✓</span><span>Searches the web and reads the results — read-only, so it never asks</span></li>
           <li><span class="m">✓</span><span>Teach it a task by doing it once in the browser</span></li>
           <li><span class="m">✓</span><span>Drives your logged-in Chrome — click, type, upload, download</span></li>
           <li><span class="m">✓</span><span>ChatGPT, Claude and Gemini, switch per message</span></li>
           <li><span class="m">✓</span><span>Documents and sheets, saved as real files on your PC</span></li>
-          <li><span class="m">✓</span><span>Dictation, transcribed on your PC</span></li>
         </ul>
       </div>
       <div>
