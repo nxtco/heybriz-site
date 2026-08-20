@@ -210,6 +210,14 @@
 
   /* 요금 */
   .plans { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 40px; }
+  /* 베타 배지. eyebrow 옆에 붙는 작은 태그라 배경과 별개로 자기 테두리를
+     갖는다 — 큰 글자 사이에서도 "이건 라벨이다" 가 한눈에 갈려야 한다. */
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--brand); background: rgba(108, 76, 241, 0.1);
+    border: 1px solid rgba(108, 76, 241, 0.28); border-radius: 999px;
+    padding: 3px 10px; vertical-align: middle; margin-left: 8px;
+  }
   .card { border: 1px solid var(--rule); border-radius: 14px; padding: 26px 24px; background: #fff; }
   .card.pick { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(108, 76, 241, 0.09); }
   .card h3 { font-size: 16px; font-weight: 640; margin: 0 0 6px; }
@@ -411,11 +419,20 @@
 
 <!-- 요금. **아직 확정 전이라 숫자는 하나만 세운다** — 안 정한 것을 정한 척
      적어 두면 나중에 바꿀 때 그것이 값 인상으로 읽힌다. -->
+<!-- 요금. **베타 동안은 충전만 판다.** 월간 구독은 아직 안 만들었고 만든 척
+     적어 두면 나중에 실제로 낼 때 그게 "새로 생긴 요금" 처럼 보인다 — 지금
+     있는 것(크레딧 팩)만 정확히 말한다.
+     Credits only for now: a monthly plan does not exist yet, and claiming one
+     does would make its eventual launch read as a new charge rather than
+     something we always said was coming. -->
 <section id="pricing" class="tint">
   <div class="wrap center">
-    <p class="eyebrow">Pricing</p>
-    <h2>One price. Every model.</h2>
-    <p class="lede2">Free while in early access — and free stays free for the people who help build it.</p>
+    <p class="eyebrow">Pricing <span class="tag">Beta</span></p>
+    <h2>Free while in early access.<br>Top up when you need more.</h2>
+    <p class="lede2">
+      Credits only, no subscription — a monthly plan is coming once heybriz is out
+      of early access.
+    </p>
     <div class="plans" style="text-align: left">
       <div class="card pick">
         <h3>Early access</h3>
@@ -427,28 +444,19 @@
         </ul>
       </div>
       <div class="card">
-        <h3>Personal</h3>
-        <div class="price">$10 <span>/ month</span></div>
+        <h3>Top up</h3>
+        <div class="price">$10<span>+</span></div>
         <ul>
-          <li>ChatGPT, Claude and Gemini</li>
-          <li>Monthly credit, top up if you run out</li>
-          <li>You only pay for what you use</li>
+          <li>$10 → 10,000 credits</li>
+          <li>$25 → 25,000 credits</li>
+          <li>$50 → 50,000 credits</li>
+          <li>Valid 12 months, tax included</li>
         </ul>
-        <p class="soon">Not live yet — payments are being set up.</p>
-      </div>
-      <div class="card">
-        <h3>Team</h3>
-        <div class="price">—</div>
-        <ul>
-          <li>Shared workflows</li>
-          <li>Shared documents</li>
-        </ul>
-        <p class="soon">Being figured out. Tell me what you need.</p>
       </div>
     </div>
     <p class="fine">
-      Bring your own API key instead, if you prefer — heybriz works with your own Anthropic,
-      OpenAI or Gemini key, and with a model running on your own PC.
+      Credits are spent as heybriz works, across every model. A monthly plan will
+      sit alongside this once early access opens up — not replace it.
     </p>
   </div>
 </section>
