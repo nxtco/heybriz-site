@@ -40,8 +40,13 @@
      그렇게 보였다. 좁으면 접는 대신 **감춘다**(아래 미디어 쿼리).
      No wrap: wrapping drops the nav onto its own line, misaligned with the
      logo. Narrow screens hide it behind a button instead. */
+  /* **세로 패딩만 손댄다.** `padding: 18px 0` 단축을 쓰면 .wrap 이 준 좌우
+     여백까지 0 으로 덮어써서 로고가 화면 끝에 붙는다 — 명시도가 더 높아
+     조용히 이긴다. 실제로 폰에서 로고가 가장자리에 닿아 있었다.
+     Longhand only: the shorthand also zeroes .wrap's horizontal padding. */
   .topbar .row {
-    display: flex; align-items: center; gap: 28px; padding: 18px 0;
+    display: flex; align-items: center; gap: 28px;
+    padding-top: 18px; padding-bottom: 18px;
   }
   .brand { font-size: 19px; font-weight: 700; text-decoration: none; letter-spacing: -0.02em; }
   /* `briz` 만 액센트 색. 어두운 상단 바 위라 밝은 쪽(--brand-2)이라야 읽힌다. */
@@ -49,6 +54,15 @@
   .topbar nav { display: flex; gap: 26px; margin-left: auto; }
   .topbar nav a { text-decoration: none; color: var(--on-deep-2); font-size: 15px; }
   .topbar nav a:hover { color: var(--on-deep); }
+  /* 닫기 표시와 막은 **모바일 시트 전용**이다. 넓은 화면에서는 메뉴가 늘
+     펼쳐져 있으므로 닫을 것이 없다 — 여기서 감추지 않으면 데스크톱 메뉴 끝에
+     ✕ 가 하나 더 붙어 보인다(실제로 그렇게 나갔다).
+     둘 다 **미디어 쿼리 밖에서** 꺼 둔다. 안에서만 정의하면 넓은 화면에는
+     규칙이 없어 기본값(display:block)으로 살아난다.
+     Both are sheet-only, and both are switched off here rather than only
+     inside the query — otherwise wide screens fall back to the default. */
+  .topbar nav .close,
+  .scrim { display: none; }
 
   /* 햄버거. 넓은 화면에서는 없는 셈 친다. */
   .menu-btn {
@@ -57,22 +71,41 @@
   }
 
   @media (max-width: 720px) {
-    .menu-btn { display: block; }
-    /* 열리면 화면을 덮는다 — 반쯤 걸친 메뉴는 뒤 내용과 겹쳐 읽기 나쁘다.
-       Full-cover panel: a half-height menu overlaps the content behind it. */
+    /* 폰에서는 좌우 여백을 좁힌다 — 28px 은 375px 화면에서 글자 자리를
+       그만큼 잡아먹고, 로고와 햄버거가 화면 끝에서 너무 멀어 보인다. */
+    .wrap { padding: 0 18px; }
+    .menu-btn { display: block; margin-right: -8px; } /* 광학 정렬: 버튼 패딩만큼 당긴다 */
+
+    /* **상단에서 내려오는 시트.** 화면을 통째로 덮지 않는다 — 페이지가
+       사라지면 어디에 있었는지 감이 끊기고, 짧은 메뉴에 전체 화면은 과하다.
+       뒤는 어둡게 깔아 시트가 위에 있다는 것만 알린다.
+       A sheet under the bar, not a full takeover: covering everything loses
+       the reader's place, and four links do not need a whole screen. */
     .topbar nav {
-      display: none; position: fixed; inset: 0; z-index: 50;
-      flex-direction: column; justify-content: center; align-items: center; gap: 4px;
-      background: var(--deep); margin: 0; padding: 24px;
+      display: none; position: fixed; left: 0; right: 0; top: 0; z-index: 50;
+      flex-direction: column; align-items: stretch; gap: 0;
+      background: var(--deep-2); margin: 0; padding: 64px 18px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
     }
     .topbar nav.open { display: flex; }
-    .topbar nav a { font-size: 21px; color: var(--on-deep); padding: 14px 20px; }
-    /* 닫기. 열어 놓고 나갈 길이 없으면 뒤로가기를 누르게 되고, 그러면 페이지를 떠난다. */
-    .topbar nav .close {
-      position: absolute; top: 14px; right: 18px; font-size: 26px; padding: 8px 12px;
-      color: var(--on-deep-2);
+    .topbar nav a {
+      font-size: 17px; color: var(--on-deep); padding: 15px 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
-    /* 메뉴가 떠 있는 동안 뒤가 스크롤되면 닫았을 때 엉뚱한 자리에 있다. */
+    .topbar nav a:first-of-type { border-top: 0; }
+    /* 닫기는 햄버거가 있던 자리에 겹쳐 둔다 — 누른 손가락이 그대로 있는 곳이다. */
+    .topbar nav .close {
+      display: block; position: absolute; top: 14px; right: 12px;
+      font-size: 22px; padding: 8px 12px; color: var(--on-deep-2); border: 0;
+    }
+    /* 시트 밖을 눌러 닫을 수 있게 깔아 두는 막. */
+    .scrim {
+      position: fixed; inset: 0; z-index: 40;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .scrim.open { display: block; }
+    /* 시트가 떠 있는 동안 뒤가 스크롤되면 닫았을 때 엉뚱한 자리에 있다. */
     body.locked { overflow: hidden; }
   }
 
@@ -218,6 +251,9 @@
       <a href="#privacy">Privacy</a>
       <a href="#pricing">Pricing</a>
     </nav>
+    <!-- 시트 밖을 눌러 닫는 막. 시트와 형제로 두어야 z-index 가 시트 아래에
+         깔린다. Sibling so it stacks under the sheet, not over it. -->
+    <div class="scrim" id="scrim"></div>
   </div>
 </div>
 
@@ -466,11 +502,16 @@
     const nav = document.getElementById('nav')
     const btn = document.getElementById('menu-btn')
     if (!nav || !btn) return
+    const scrim = document.getElementById('scrim')
     const set = (open) => {
       nav.classList.toggle('open', open)
+      scrim?.classList.toggle('open', open)
       document.body.classList.toggle('locked', open)
       btn.setAttribute('aria-expanded', String(open))
     }
+    // 시트 밖을 누르면 닫힌다. 이게 없으면 사람들이 뒤로가기를 누르고,
+    // 그러면 페이지를 떠난다.
+    scrim?.addEventListener('click', () => set(false))
     btn.addEventListener('click', () => set(!nav.classList.contains('open')))
     nav.addEventListener('click', (e) => {
       if (e.target.closest('a')) {
