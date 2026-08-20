@@ -35,15 +35,46 @@
 
   /* ── 상단 바 ─────────────────────────────────────────────── */
   .topbar { background: var(--deep); color: var(--on-deep); }
+  /* **wrap 을 쓰지 않는다.** 좁아지면 nav 가 통째로 아랫줄로 접히면서 로고와
+     기준선이 어긋나고, 가운데 떠 있는 메뉴 줄이 하나 생긴다 — 폰에서 정확히
+     그렇게 보였다. 좁으면 접는 대신 **감춘다**(아래 미디어 쿼리).
+     No wrap: wrapping drops the nav onto its own line, misaligned with the
+     logo. Narrow screens hide it behind a button instead. */
   .topbar .row {
-    display: flex; align-items: center; gap: 28px; padding: 18px 0; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 28px; padding: 18px 0;
   }
   .brand { font-size: 19px; font-weight: 700; text-decoration: none; letter-spacing: -0.02em; }
   /* `briz` 만 액센트 색. 어두운 상단 바 위라 밝은 쪽(--brand-2)이라야 읽힌다. */
   .brand b { color: var(--brand-2); font-weight: 700; }
-  .topbar nav { display: flex; gap: 26px; margin-left: auto; flex-wrap: wrap; }
+  .topbar nav { display: flex; gap: 26px; margin-left: auto; }
   .topbar nav a { text-decoration: none; color: var(--on-deep-2); font-size: 15px; }
   .topbar nav a:hover { color: var(--on-deep); }
+
+  /* 햄버거. 넓은 화면에서는 없는 셈 친다. */
+  .menu-btn {
+    display: none; margin-left: auto; background: none; border: 0; cursor: pointer;
+    padding: 8px; color: var(--on-deep); font-size: 22px; line-height: 1;
+  }
+
+  @media (max-width: 720px) {
+    .menu-btn { display: block; }
+    /* 열리면 화면을 덮는다 — 반쯤 걸친 메뉴는 뒤 내용과 겹쳐 읽기 나쁘다.
+       Full-cover panel: a half-height menu overlaps the content behind it. */
+    .topbar nav {
+      display: none; position: fixed; inset: 0; z-index: 50;
+      flex-direction: column; justify-content: center; align-items: center; gap: 4px;
+      background: var(--deep); margin: 0; padding: 24px;
+    }
+    .topbar nav.open { display: flex; }
+    .topbar nav a { font-size: 21px; color: var(--on-deep); padding: 14px 20px; }
+    /* 닫기. 열어 놓고 나갈 길이 없으면 뒤로가기를 누르게 되고, 그러면 페이지를 떠난다. */
+    .topbar nav .close {
+      position: absolute; top: 14px; right: 18px; font-size: 26px; padding: 8px 12px;
+      color: var(--on-deep-2);
+    }
+    /* 메뉴가 떠 있는 동안 뒤가 스크롤되면 닫았을 때 엉뚱한 자리에 있다. */
+    body.locked { overflow: hidden; }
+  }
 
   /* ── 히어로 ──────────────────────────────────────────────── */
   .hero { background: var(--deep); color: var(--on-deep); padding: 58px 0 78px; }
@@ -179,7 +210,9 @@
 <div class="topbar">
   <div class="wrap row">
     <a class="brand" href="index.html">hey<b>briz</b></a>
-    <nav>
+    <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="nav">☰</button>
+    <nav id="nav">
+      <a class="close" href="#" id="menu-close" aria-label="Close">✕</a>
       <a href="#can">Features</a>
       <a href="#how">How it works</a>
       <a href="#privacy">Privacy</a>
@@ -423,3 +456,74 @@
     </span>
   </div>
 </footer>
+
+<script>
+  // ── 모바일 메뉴 ──────────────────────────────────────────────
+  // 링크를 누르면 **닫는다.** 앵커로 이동하는데 메뉴가 화면을 덮고 있으면
+  // 도착한 자리가 안 보여서 "아무 일도 안 일어났다" 로 읽힌다.
+  // Close on navigate: the panel covers the anchor you just jumped to.
+  ;(() => {
+    const nav = document.getElementById('nav')
+    const btn = document.getElementById('menu-btn')
+    if (!nav || !btn) return
+    const set = (open) => {
+      nav.classList.toggle('open', open)
+      document.body.classList.toggle('locked', open)
+      btn.setAttribute('aria-expanded', String(open))
+    }
+    btn.addEventListener('click', () => set(!nav.classList.contains('open')))
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('a')) {
+        if (e.target.id === 'menu-close') e.preventDefault()
+        set(false)
+      }
+    })
+    // Esc 로도 닫힌다 — 키보드만 쓰는 사람에게 나갈 길이 있어야 한다.
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && set(false))
+  })()
+
+  // ── 신청 폼 ──────────────────────────────────────────────────
+  // Formspree 페이지로 넘어가지 않고 제자리에서 답한다. 넘어가면 사용자가
+  // 우리 사이트를 떠나고, 돌아오는 사람은 거의 없다.
+  //
+  // **JS 가 없거나 실패하면 평소대로 제출된다** — action 과 method 를 그대로
+  // 두었으므로 이 스크립트는 덧붙임일 뿐이고, 없어도 신청은 접수된다.
+  // Progressive enhancement: the plain POST still works if this never runs.
+  ;(() => {
+    const form = document.querySelector('form.signup')
+    if (!form) return
+    const btn = form.querySelector('button')
+    const say = (text, ok) => {
+      const p = document.createElement('p')
+      p.className = 'fine'
+      p.style.color = ok ? 'var(--brand-2)' : '#ff9b9b'
+      p.textContent = text
+      form.replaceWith(p)
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      btn.disabled = true
+      const label = btn.textContent
+      btn.textContent = 'Sending…'
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        })
+        if (!res.ok) throw new Error(String(res.status))
+        say("Got it — I'll email you the download link myself, usually within a day.", true)
+      } catch {
+        // 실패를 삼키지 않는다. 조용히 아무 일도 안 일어나면 사용자는 자기가
+        // 신청한 줄 알고 기다린다.
+        btn.disabled = false
+        btn.textContent = label
+        const p = document.createElement('p')
+        p.className = 'fine'
+        p.style.color = '#ff9b9b'
+        p.textContent = 'That did not go through. Email hello@heybriz.com and I will sort it out.'
+        form.after(p)
+      }
+    })
+  })()
+</script>
