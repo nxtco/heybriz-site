@@ -218,6 +218,16 @@
     border: 1px solid rgba(108, 76, 241, 0.28); border-radius: 999px;
     padding: 3px 10px; vertical-align: middle; margin-left: 8px;
   }
+  /* 어두운 상단 바 위의 배지. 밝은 배경용 색을 그대로 쓰면 배경에 묻는다 —
+     테두리와 글자를 밝은 쪽(--brand-2)으로 올린다.
+     On the dark bar the light-background colours would sink into it. */
+  .brand .tag {
+    color: var(--brand-2); background: rgba(139, 110, 247, 0.16);
+    border-color: rgba(139, 110, 247, 0.4);
+    font-size: 10.5px; padding: 2px 8px; margin-left: 9px;
+    /* 로고 글자 굵기를 물려받지 않게 — 배지는 이름의 일부가 아니다. */
+    font-weight: 700; letter-spacing: 0.07em;
+  }
   .card { border: 1px solid var(--rule); border-radius: 14px; padding: 26px 24px; background: #fff; }
   .card.pick { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(108, 76, 241, 0.09); }
   .card h3 { font-size: 16px; font-weight: 640; margin: 0 0 6px; }
@@ -250,7 +260,12 @@
 
 <div class="topbar">
   <div class="wrap row">
-    <a class="brand" href="index.html">hey<b>briz</b></a>
+    <!-- 베타는 **제품 전체**에 붙는 것이라 로고 옆에 둔다. 요금 절에만 달면
+         "요금제가 베타" 로 읽히고, 히어로에만 달면 스크롤하면 사라진다.
+         로고 옆이면 어느 절을 보고 있든 따라다닌다.
+         Beta belongs to the product, not to one section: next to the wordmark
+         it stays visible wherever you are on the page. -->
+    <a class="brand" href="index.html">hey<b>briz</b><span class="tag">Beta</span></a>
     <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="nav">☰</button>
     <nav id="nav">
       <a class="close" href="#" id="menu-close" aria-label="Close">✕</a>
@@ -427,7 +442,7 @@
      something we always said was coming. -->
 <section id="pricing" class="tint">
   <div class="wrap center">
-    <p class="eyebrow">Pricing <span class="tag">Beta</span></p>
+    <p class="eyebrow">Pricing</p>
     <h2>Free while in early access.<br>Top up when you need more.</h2>
     <p class="lede2">
       Credits only, no subscription — a monthly plan is coming once heybriz is out
@@ -438,7 +453,11 @@
         <h3>Early access</h3>
         <div class="price">Free <span>· by invitation</span></div>
         <ul>
-          <li>Every model, no API key</li>
+          <!-- "Every model" 을 쓰지 않는다. 프로덕션에 선 벤더 키는 지금
+               Anthropic 하나뿐이라(HEYBRIZ_LLM_KEY_ANTHROPIC) 여러 모델을
+               고를 수 있다는 말이 사실이 아니다. 셋이 다 서면 그때 되돌린다.
+               Only one vendor key is live, so "every model" would be false. -->
+          <li>No API key needed</li>
           <li>Browser control and workflows</li>
           <li>No card, no trial clock</li>
         </ul>
@@ -455,8 +474,8 @@
       </div>
     </div>
     <p class="fine">
-      Credits are spent as heybriz works, across every model. A monthly plan will
-      sit alongside this once early access opens up — not replace it.
+      Credits are spent as heybriz works. A monthly plan will sit alongside this
+      once early access opens up — not replace it.
     </p>
   </div>
 </section>
