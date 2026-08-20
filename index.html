@@ -1,4 +1,10 @@
 <title>heybriz — Tell your computer what to do</title>
+<!-- **이게 없으면 모바일이 화면을 980px 로 가정하고 데스크톱 판을 축소해서
+     보여준다.** CSS 의 미디어 쿼리·clamp 가 전부 무의미해진다 — 실제로 그렇게
+     나갔다(privacy.html 에는 있는데 index.html 만 빠져 있었다).
+     Without this, phones assume a 980px viewport and shrink the desktop layout,
+     which makes every responsive rule below dead weight. -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- The one-liner IS the title tag: it is what shows in search results and
      browser tabs, so the positioning line has to live here, not only in the h1. -->
 <meta name="description" content="heybriz is a voice-first AI assistant for Windows. Say what you need — it searches, clicks and types in the Chrome you're already signed into, and shows you the plan before anything changes.">
