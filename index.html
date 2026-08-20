@@ -1,278 +1,357 @@
 <title>heybriz — Tell your computer what to do</title>
 <!-- The one-liner IS the title tag: it is what shows in search results and
      browser tabs, so the positioning line has to live here, not only in the h1. -->
-<meta name="description" content="heybriz is a voice-first AI assistant for Windows. Say what you need — it searches, clicks and types in the Chrome you're already signed into, and shows you the plan before anything changes." />
+<meta name="description" content="heybriz is a voice-first AI assistant for Windows. Say what you need — it searches, clicks and types in the Chrome you're already signed into, and shows you the plan before anything changes.">
 <style>
   :root {
-    --ground: #f3f4f6; --panel: #ffffff; --panel-2: #e9ebee;
-    --ink: #16181c; --ink-2: #5a6069; --rule: #d8dbe0;
-    --signal: #b4560c; --signal-dim: #f7ede2; --go: #2c7a52;
+    --ground: #ffffff; --panel: #f7f7fb; --deep: #0d0e14; --deep-2: #171926;
+    --ink: #16181c; --ink-2: #5a6069; --rule: #e4e5ea;
+    --brand: #6c4cf1; --brand-2: #8b6ef7; --on-deep: #f2f2f7; --on-deep-2: #a8abbd;
     --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --ground: #101216; --panel: #171a20; --panel-2: #1e222a;
-      --ink: #e7e9ed; --ink-2: #949aa4; --rule: #272b33;
-      --signal: #f0a44a; --signal-dim: #2a2015; --go: #59c98c;
-    }
-  }
-  :root[data-theme="dark"] {
-    --ground: #101216; --panel: #171a20; --panel-2: #1e222a;
-    --ink: #e7e9ed; --ink-2: #949aa4; --rule: #272b33;
-    --signal: #f0a44a; --signal-dim: #2a2015; --go: #59c98c;
-  }
-  :root[data-theme="light"] {
-    --ground: #f3f4f6; --panel: #ffffff; --panel-2: #e9ebee;
-    --ink: #16181c; --ink-2: #5a6069; --rule: #d8dbe0;
-    --signal: #b4560c; --signal-dim: #f7ede2; --go: #2c7a52;
-  }
 
+  * { box-sizing: border-box; }
   body {
-    background: var(--ground); color: var(--ink); font-family: var(--sans);
+    margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans);
     font-size: 16.5px; line-height: 1.62; -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 800px; margin: 0 auto; padding: 0 28px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+  .narrow { max-width: 760px; margin: 0 auto; }
   a { color: inherit; }
-  :focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 3px; }
 
-  .label {
-    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.11em;
-    text-transform: uppercase; color: var(--ink-2);
+  .eyebrow {
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--brand); margin: 0 0 12px;
   }
+  .grad { color: var(--brand); }
 
-  .bar {
-    display: flex; align-items: baseline; justify-content: space-between;
-    gap: 20px; padding: 26px 0 0; flex-wrap: wrap;
+  /* ── 상단 바 ─────────────────────────────────────────────── */
+  .topbar { background: var(--deep); color: var(--on-deep); }
+  .topbar .row {
+    display: flex; align-items: center; gap: 28px; padding: 18px 0; flex-wrap: wrap;
   }
-  .brand { font-family: var(--mono); font-size: 15px; font-weight: 600; text-decoration: none; }
-  .brand b { color: var(--signal); font-weight: 600; }
-  .bar nav { display: flex; gap: 20px; }
-  .bar nav a { text-decoration: none; color: var(--ink-2); font-size: 15px; }
-  .bar nav a:hover { color: var(--ink); }
+  .brand { font-size: 19px; font-weight: 700; text-decoration: none; letter-spacing: -0.02em; }
+  /* `briz` 만 액센트 색. 어두운 상단 바 위라 밝은 쪽(--brand-2)이라야 읽힌다. */
+  .brand b { color: var(--brand-2); font-weight: 700; }
+  .topbar nav { display: flex; gap: 26px; margin-left: auto; flex-wrap: wrap; }
+  .topbar nav a { text-decoration: none; color: var(--on-deep-2); font-size: 15px; }
+  .topbar nav a:hover { color: var(--on-deep); }
 
-  section { padding: 62px 0 0; }
-  .rule {
-    display: flex; align-items: center; gap: 16px;
-    border-top: 1px solid var(--rule); padding-top: 12px; margin-bottom: 28px;
+  /* ── 히어로 ──────────────────────────────────────────────── */
+  .hero { background: var(--deep); color: var(--on-deep); padding: 58px 0 78px; }
+  .pill {
+    display: inline-block; font-size: 13px; color: var(--brand-2);
+    background: rgba(108, 76, 241, 0.16); border: 1px solid rgba(139, 110, 247, 0.3);
+    border-radius: 999px; padding: 6px 14px; margin-bottom: 26px;
   }
-  .rule::after { content: ""; flex: 1; }
-
   h1 {
-    font-size: clamp(32px, 5.6vw, 52px); line-height: 1.06; letter-spacing: -0.035em;
-    font-weight: 680; margin: 0 0 16px; text-wrap: balance;
+    font-size: clamp(36px, 6vw, 60px); line-height: 1.06; letter-spacing: -0.035em;
+    font-weight: 720; margin: 0 0 20px; text-wrap: balance; max-width: 16ch;
   }
-  h2 {
-    font-size: clamp(22px, 3.2vw, 29px); line-height: 1.16; letter-spacing: -0.028em;
-    font-weight: 680; margin: 0 0 14px; text-wrap: balance;
-  }
-  h3 { font-size: 16.5px; font-weight: 620; letter-spacing: -0.012em; margin: 0 0 6px; }
-  p { margin: 0 0 14px; max-width: 58ch; }
-  .lede { font-size: clamp(16.5px, 2vw, 18.5px); color: var(--ink-2); max-width: 46ch; }
-  .lede b { color: var(--ink); font-weight: 620; }
-  .dek { color: var(--ink-2); max-width: 56ch; margin-bottom: 22px; }
-
-  .hero { padding: 50px 0 6px; }
-  .flag { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); flex: none; }
-  @media (prefers-reduced-motion: no-preference) { .dot { animation: pulse 2.4s ease-in-out infinite; } }
-  @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.25 } }
-
-  /* demo placeholder — swap for a real recording */
-  .demo {
-    aspect-ratio: 16 / 9; border: 1px dashed var(--rule); border-radius: 10px;
-    background: var(--panel); margin: 26px 0; display: flex; flex-direction: column;
-    gap: 14px; align-items: center; justify-content: center; padding: 24px; text-align: center;
-  }
-  .demo .say {
-    font-size: clamp(16px, 2.4vw, 20px); font-weight: 560; letter-spacing: -0.01em;
-    max-width: 34ch; text-wrap: balance;
-  }
-  .demo .say::before { content: "🎙 "; }
-  .demo span.tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
-                   text-transform: uppercase; color: var(--ink-2); }
+  .lede { font-size: clamp(16.5px, 1.9vw, 19px); color: var(--on-deep-2); max-width: 52ch; margin: 0 0 30px; }
+  .lede b { color: var(--on-deep); font-weight: 620; }
 
   .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .btn {
-    display: inline-block; text-decoration: none; cursor: pointer; font-family: inherit;
-    font-size: 15.5px; font-weight: 560; padding: 11px 20px; border-radius: 5px;
-    background: var(--ink); color: var(--ground); border: 1px solid var(--ink);
+    display: inline-flex; align-items: center; gap: 9px; text-decoration: none; cursor: pointer;
+    font-family: inherit; font-size: 15.5px; font-weight: 600; padding: 13px 24px;
+    border-radius: 10px; border: 1px solid transparent;
+    background: var(--brand); color: #fff;
   }
-  .btn:hover { opacity: 0.86; }
-  /* 나란히 둘 때 무엇이 주된 행동인지 보이게 — 둘 다 검으면 고르라는 말이 된다 */
-  .btn-quiet { background: transparent; color: var(--ink); border-color: var(--rule); }
+  .btn:hover { background: var(--brand-2); }
+  .btn-ghost { background: transparent; color: var(--on-deep); border-color: rgba(255, 255, 255, 0.22); }
+  .btn-ghost:hover { background: rgba(255, 255, 255, 0.06); }
 
-  /* 요금 — 아직 확정 전이라 숫자 하나만 세우고 나머지는 비워 둔다 */
-  /* 랩이 800px 이라 230px 로는 셋째 칸이 줄바꿈된다 — 좁은 화면에서는
-     여전히 알아서 접힌다(auto-fit). */
-  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 22px 0 0; }
-  .plan { border: 1px solid var(--rule); border-radius: 8px; padding: 20px; background: var(--panel); }
-  .plan.pick { border-color: var(--ink); }
-  .plan h3 { margin: 0 0 4px; font-size: 16px; }
-  .plan .price { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
-  .plan .price span { font-size: 14px; font-weight: 400; color: var(--ink-2); }
-  .plan ul { margin: 12px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 14.5px; line-height: 1.7; }
-  .plan .soon { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
-  .fine { font-family: var(--mono); font-size: 12px; color: var(--ink-2); margin: 14px 0 0; max-width: 58ch; }
+  /* 히어로 아래 한 줄짜리 사실들. 지킬 수 있는 것만 적는다. */
+  .facts { display: flex; gap: 26px; flex-wrap: wrap; margin: 30px 0 0; padding: 0; list-style: none; }
+  .facts li { display: flex; align-items: center; gap: 8px; font-size: 14.5px; color: var(--on-deep-2); }
+  .facts .tick { color: var(--brand-2); font-weight: 700; }
 
+  /* ── 섹션 ────────────────────────────────────────────────── */
+  section { padding: 76px 0; }
+  section.tint { background: var(--panel); }
+  h2 {
+    font-size: clamp(25px, 3.4vw, 36px); line-height: 1.16; letter-spacing: -0.03em;
+    font-weight: 700; margin: 0 0 14px; text-wrap: balance;
+  }
+  .center { text-align: center; }
+  .center .lede2 { color: var(--ink-2); max-width: 54ch; margin: 0 auto 44px; }
+
+  /* 할 수 있는 일 */
+  .grid {
+    display: grid; gap: 34px 28px; margin: 46px 0 0;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+  .cell { text-align: center; }
+  .cell .ic { font-size: 25px; line-height: 1; display: block; margin-bottom: 14px; }
+  .cell h3 { font-size: 16.5px; font-weight: 640; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .cell p { color: var(--ink-2); font-size: 14.5px; margin: 0; }
+
+  /* 단계 */
+  .steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); margin-top: 46px; }
+  .step {
+    background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 22px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .step .n {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff;
+    font-size: 13px; font-weight: 700; display: grid; place-items: center; flex: none;
+  }
+  .step h3 { font-size: 15.5px; font-weight: 640; margin: 0; letter-spacing: -0.01em; }
+  .step p { color: var(--ink-2); font-size: 14px; margin: 0; }
+  .quote {
+    background: var(--deep-2); color: var(--on-deep); border-radius: 10px;
+    padding: 13px 15px; font-size: 14px; line-height: 1.5; margin-top: auto;
+  }
+  .plan { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px; margin-top: auto; }
+  .plan .ttl { font-size: 12.5px; font-weight: 700; margin-bottom: 8px; }
+  .plan ul { margin: 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
+  .plan .tick { color: var(--brand); font-weight: 700; margin-right: 6px; }
+
+  /* 프라이버시 */
+  .privacy {
+    background: linear-gradient(135deg, #efeaff 0%, #f6f4ff 100%);
+    border: 1px solid #e0d8ff; border-radius: 18px; padding: 40px 38px;
+  }
+  .privacy h2 { margin-bottom: 12px; }
+  .privacy p { color: var(--ink-2); max-width: 62ch; }
+  .privacy ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+  .privacy li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+  .privacy .tick { color: var(--brand); font-weight: 700; flex: none; }
+  .privacy a { color: var(--brand); font-weight: 600; }
+
+  /* 정직 */
+  .risks { display: grid; gap: 0; margin-top: 40px; }
+  .risk { border-top: 1px solid var(--rule); padding: 20px 0; }
+  .risk:first-child { border-top: 0; }
+  .risk h3 { font-size: 16.5px; font-weight: 640; margin: 0 0 5px; }
+  .risk p { color: var(--ink-2); font-size: 15px; margin: 0; max-width: 66ch; }
+
+  /* 서약 */
   .pledge {
-    background: var(--panel); border: 1px solid var(--rule);
-    border-left: 3px solid var(--signal); border-radius: 0 8px 8px 0; padding: 22px 24px;
+    background: #fff; border: 1px solid var(--rule); border-left: 3px solid var(--brand);
+    border-radius: 0 12px 12px 0; padding: 26px 28px;
   }
-  .pledge p:last-child { margin-bottom: 0; }
-  .sig { font-family: var(--mono); font-size: 13px; color: var(--ink-2); margin-top: 16px; }
+  .pledge p { margin: 0 0 14px; color: var(--ink-2); max-width: 62ch; }
+  .pledge p:last-child { margin: 0; }
+  .sig { font-family: var(--mono); font-size: 13px; }
 
-  ol.steps { list-style: none; margin: 0; padding: 0; }
-  ol.steps li {
-    display: grid; grid-template-columns: 5.4rem 1fr; gap: 16px;
-    padding: 16px 0; border-top: 1px solid var(--rule);
-  }
-  ol.steps li:first-child { border-top: 0; padding-top: 0; }
-  ol.steps .k { font-family: var(--mono); font-size: 12px; color: var(--signal); letter-spacing: 0.08em; padding-top: 2px; }
-  ol.steps p { margin: 0; color: var(--ink-2); font-size: 15px; }
+  /* 요금 */
+  .plans { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 40px; }
+  .card { border: 1px solid var(--rule); border-radius: 14px; padding: 26px 24px; background: #fff; }
+  .card.pick { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(108, 76, 241, 0.09); }
+  .card h3 { font-size: 16px; font-weight: 640; margin: 0 0 6px; }
+  .price { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; }
+  .price span { font-size: 14px; font-weight: 400; color: var(--ink-2); }
+  .card ul { margin: 16px 0 0; padding-left: 20px; color: var(--ink-2); font-size: 14.5px; line-height: 1.8; }
+  .soon { font-family: var(--mono); font-size: 12px; color: var(--ink-2); margin: 14px 0 0; }
+  .fine { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); margin: 20px 0 0; max-width: 66ch; }
 
-  .cols { display: grid; gap: 30px; }
-  @media (min-width: 640px) { .cols { grid-template-columns: 1fr 1fr; } }
-  ul.set { list-style: none; margin: 0; padding: 0; }
-  ul.set li {
-    display: grid; grid-template-columns: 1.3rem 1fr; gap: 9px;
-    padding: 8px 0; border-top: 1px solid var(--rule); font-size: 15px;
-  }
-  ul.set li:first-child { border-top: 0; }
-  ul.set .m { font-family: var(--mono); font-size: 12.5px; padding-top: 2px; }
-  ul.can .m { color: var(--go); }
-  ul.soon .m { color: var(--signal); }
-
-  .risk { border-top: 1px solid var(--rule); padding: 16px 0; }
-  .risk:first-of-type { border-top: 0; }
-  .risk h3 { margin-bottom: 4px; }
-  .risk p { margin: 0; color: var(--ink-2); font-size: 15px; }
-
-  form.signup { display: flex; gap: 10px; flex-wrap: wrap; max-width: 30rem; }
+  /* 신청 */
+  .cta { background: var(--deep); color: var(--on-deep); border-radius: 18px; padding: 44px 40px; }
+  .cta h2 { margin-bottom: 10px; }
+  .cta p { color: var(--on-deep-2); max-width: 56ch; margin: 0 0 26px; }
+  form.signup { display: flex; gap: 10px; flex-wrap: wrap; max-width: 34rem; }
   form.signup input {
-    flex: 1 1 15rem; font-family: inherit; font-size: 16px; padding: 11px 13px;
-    border-radius: 5px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink);
+    flex: 1 1 16rem; font-family: inherit; font-size: 16px; padding: 13px 15px;
+    border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.07); color: var(--on-deep);
   }
+  form.signup input::placeholder { color: #7d819a; }
+  .cta .fine { color: var(--on-deep-2); }
 
   footer {
-    margin-top: 60px; border-top: 1px solid var(--rule); padding: 20px 0 50px;
+    border-top: 1px solid var(--rule); padding: 26px 0 56px;
     display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-size: 14px; color: var(--ink-2);
   }
+  footer a { color: var(--ink-2); }
 </style>
 
-<div class="wrap">
-  <div class="bar">
+<div class="topbar">
+  <div class="wrap row">
     <a class="brand" href="index.html">hey<b>briz</b></a>
     <nav>
+      <a href="#can">Features</a>
       <a href="#how">How it works</a>
+      <a href="#privacy">Privacy</a>
       <a href="#pricing">Pricing</a>
-      <a href="#back">Early access</a>
     </nav>
   </div>
+</div>
 
-  <!-- Positioning (2026-08-19): we do not sell "AI browser automation" — that
-       category belongs to developer tools (Browser Use, Skyvern) and reads as
-       infrastructure. The hero sells the outcome a person wants: the computer
-       does the thing. Voice leads because it is the differentiator no
-       browser-agent competitor leads with; typing still works and the copy
-       says so — never claim voice is the only way in. -->
-  <header class="hero">
-    <div class="flag"><span class="dot"></span><span class="label">Early access · Windows 10/11</span></div>
-    <h1>Tell your computer<br />what to do.</h1>
+<!-- Positioning (2026-08-19): we do not sell "AI browser automation" — that
+     category belongs to developer tools (Browser Use, Skyvern) and reads as
+     infrastructure. The hero sells the outcome a person wants: the computer
+     does the thing. Voice leads because it is the differentiator no
+     browser-agent competitor leads with; typing still works and the copy
+     says so — never claim voice is the only way in.
+
+     **다운로드 링크를 걷어냈다 (2026-08-20).** 초기에는 신청한 사람에게 직접
+     링크를 보내 설치와 사용법을 1:1 로 돕는다. 서명 없는 설치본이라 혼자
+     받으면 SmartScreen 에서 멈추는 사람이 대부분이고, 그렇게 잃은 사람은
+     무엇이 막혔는지도 말해 주지 않는다. -->
+<header class="hero">
+  <div class="wrap">
+    <span class="pill">AI Assistant for Your Browser</span>
+    <h1>Tell your computer.<br><span class="grad">heybriz</span> gets it done.</h1>
     <p class="lede">
-      heybriz is a voice-first AI assistant for Windows. Say what you need —
-      it searches, clicks and types in <b>the Chrome you're already signed
-      into</b>, and shows you the plan before anything changes.
+      Speak naturally. heybriz understands what you want and works across the web
+      for you - searching, clicking, typing, filling forms, and more.
     </p>
-
-    <!-- Placeholder until the recording lands. The spoken line is already the
-         real demo script, so the page and the video will say the same thing. -->
-    <div class="demo" aria-hidden="true">
-      <p class="say">&ldquo;Find the cheapest direct flight from New York to Seoul this weekend.&rdquo;</p>
-      <span class="tag">Watch it get done — video coming soon</span>
-    </div>
 
     <div class="actions">
-      <!-- 설치본은 GitHub Releases 에 둔다. 랜딩 호스트에 100MB 짜리 exe 를
-           올리면 배포마다 그것까지 함께 밀게 되고, 정적 호스팅의 파일 크기
-           제한에도 걸린다. /latest/download/ 는 최신 릴리스로 알아서 넘긴다 —
-           버전을 올릴 때마다 이 링크를 고칠 필요가 없다. -->
-      <a class="btn" href="https://github.com/nxtco/heybriz-releases/releases/latest/download/heybriz-setup.exe">
-        Download for Windows
-      </a>
-      <a class="btn btn-quiet" href="#back">Get early access</a>
+      <a class="btn" href="#back">🎙 Get early access</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
     </div>
-    <p class="fine">Windows 10/11 · free while in early access · no card</p>
-    <!-- The installer is not code-signed yet, so Windows hides the run button
-         behind "More info". Without the click order spelled out people assume
-         there is no way through and give up. Say why it appears, not just how
-         to dismiss it. -->
-    <p class="fine">
-      Windows will say <b>&ldquo;Windows protected your PC&rdquo;</b> &mdash; it does that for any
-      installer it has not seen often yet. Click <b>More info</b>, then <b>Run anyway</b>.
-    </p>
-  </header>
 
-  <!-- Speak → Show → Delegate. One verb per step, and each step is a bigger
-       hand-off than the last: say a task, teach a task, own a routine. -->
-  <section id="how">
-    <div class="rule"><span class="label">How it works</span></div>
-    <h2>Speak. Show. Delegate.</h2>
-    <ol class="steps">
-      <li>
-        <span class="k">SPEAK</span>
-        <div>
-          <h3>Say it — or type it</h3>
-          <p>Hold a key, say what you need. Dictation is transcribed on your own PC. It searches, reads the pages itself, and tells you where it got each part.</p>
-        </div>
-      </li>
-      <li>
-        <span class="k">SHOW</span>
-        <div>
-          <h3>Do a chore once, in front of it</h3>
-          <p>It works in the browser you're already in, and learns the task by watching you do it. It shows the plan before anything changes — payments and passwords are refused in code, not by asking nicely.</p>
-        </div>
-      </li>
-      <li>
-        <span class="k">DELEGATE</span>
-        <div>
-          <h3>From then on, it's one sentence</h3>
-          <p>&ldquo;Do the weekly report.&rdquo; The steps you taught it run again — in your browser, with your logins, while you watch.</p>
-        </div>
-      </li>
-    </ol>
-  </section>
+    <!-- 지킬 수 있는 것만. "Takes seconds to start" 류는 설치가 SmartScreen 을
+         지나야 하는 지금 사실이 아니다. -->
+    <ul class="facts">
+      <li><span class="tick">✓</span> Works in your own browser</li>
+      <li><span class="tick">✓</span> Shows the plan before it acts</li>
+      <li><span class="tick">✓</span> Windows 10/11</li>
+    </ul>
+  </div>
+</header>
 
-  <section id="pledge">
-    <div class="rule"><span class="label">The pledge</span></div>
-    <h2>You email me. I read it. It's often in the next build.</h2>
-    <div class="pledge">
+<!-- 할 수 있는 일. **결제와 이메일 발송은 넣지 않는다** — 결제·서명·삭제는
+     browser-guard 가 코드로 막고 있어서 못 하고, 못 하는 것을 적으면 첫날
+     신뢰를 잃는다. Nothing here that the guard blocks. -->
+<section id="can" class="tint">
+  <div class="wrap center">
+    <p class="eyebrow">POWERFUL AI AGENT</p>
+    <h2>From simple tasks to complex workflows, <span class="grad">heybriz</span> handles it for you.</h2>
+    <div class="grid">
+      <div class="cell">
+        <span class="ic">🔍</span>
+        <h3>Search &amp; find</h3>
+        <p>Reads the pages itself and tells you where each part came from.</p>
+      </div>
+      <div class="cell">
+        <span class="ic">✍️</span>
+        <h3>Fill forms</h3>
+        <p>Fills long forms and applications. You press the final button.</p>
+      </div>
+      <div class="cell">
+        <span class="ic">⚖️</span>
+        <h3>Compare &amp; shortlist</h3>
+        <p>Prices, options, listings — gathered and lined up side by side.</p>
+      </div>
+      <div class="cell">
+        <span class="ic">📥</span>
+        <h3>Fetch documents</h3>
+        <p>Statements and forms from behind your logins, downloaded for you.</p>
+      </div>
+      <div class="cell">
+        <span class="ic">🔁</span>
+        <h3>Repeat a chore</h3>
+        <p>Show it once. After that it's one sentence, every time.</p>
+      </div>
+      <div class="cell">
+        <span class="ic">📄</span>
+        <h3>Keep the result</h3>
+        <p>Notes and tables saved as real files on your PC.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap center">
+    <p class="eyebrow">How it works</p>
+    <h2>Just tell <span class="grad">heybriz</span> what you want</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="n">1</span>
+        <h3>You speak or type</h3>
+        <p>Say what you want in plain language. Dictation runs on your own PC.</p>
+        <div class="quote">“Find the cheapest direct flight from New York to Seoul this weekend.”</div>
+      </div>
+      <div class="step">
+        <span class="n">2</span>
+        <h3>heybriz shows the plan</h3>
+        <p>You see what it intends to do — and which sites it will touch — before anything moves.</p>
+        <div class="plan">
+          <div class="ttl">Plan</div>
+          <ul>
+            <li><span class="tick">✓</span> Open Google Flights</li>
+            <li><span class="tick">✓</span> Set dates for this weekend</li>
+            <li><span class="tick">✓</span> Sort by price</li>
+            <li><span class="tick">✓</span> Report the cheapest</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <span class="n">3</span>
+        <h3>It works, you watch</h3>
+        <p>In your own browser, in front of you. Stop it at any point.</p>
+        <div class="plan">
+          <div class="ttl">Working…</div>
+          <ul>
+            <li>Searching flights</li>
+            <li>Comparing prices</li>
+            <li>Found 12 options</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <span class="n">4</span>
+        <h3>You get the answer</h3>
+        <p>With the assumptions it made, so you know what the number means.</p>
+        <div class="quote">Cheapest non-stop: <b>$487</b>, Air Premia, Sat 01:00 — one-way, since you did not give a return date.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 프라이버시. **여기가 가장 위험한 자리다** — 랜딩 문구가 개인정보처리방침보다
+     사람들에게 더 믿기므로, 둘이 어긋나면 그게 곧 기만이다. 그래서 방침에 없는
+     말(학습에 안 쓴다, 종단간 암호화, 대화가 기기에만 남는다)은 적지 않는다.
+     방침이 실제로 말하는 것만 옮긴다. Anything here must match /privacy. -->
+<section id="privacy" class="tint">
+  <div class="wrap">
+    <div class="privacy">
+      <p class="eyebrow">Privacy by design</p>
+      <h2>Your browser. Your accounts.<br>Your screen stays yours.</h2>
       <p>
-        This is one person, not a company with a roadmap committee. If you tell me
-        the repetitive task you're stuck doing, that's genuinely what decides what
-        I build next.
+        heybriz runs on your own PC and drives the browser you already use. Your files and the
+        pages it reads for you are not kept on our servers, and it never touches your saved
+        passwords, cookies or session tokens.
       </p>
-      <p class="sig">— building solo, shipping in public. <a href="mailto:hello@heybriz.com">hello@heybriz.com</a></p>
+      <ul>
+        <li><span class="tick">✓</span> Signing, payment and deletion are refused in code — not by asking the model nicely</li>
+        <li><span class="tick">✓</span> Account, card and ID numbers are masked before anything is stored</li>
+        <li><span class="tick">✓</span> Your pages, files and screenshots are never stored on our servers</li>
+        <li><span class="tick">✓</span> Chrome shows a banner the whole time it can act — you can stop it there</li>
+      </ul>
+      <p style="margin-top: 22px">
+        <a href="/privacy">Read exactly what we store →</a>
+      </p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 요금. **아직 확정 전이라 숫자는 하나만 세운다** — 안 정한 것을 정한 척
-       적어 두면 나중에 바꿀 때 그것이 값 인상으로 읽힌다. 비어 있는 칸은
-       비어 있다고 말하는 편이 낫다. -->
-  <section id="pricing">
-    <div class="rule"><span class="label">Pricing</span></div>
+<!-- 요금. **아직 확정 전이라 숫자는 하나만 세운다** — 안 정한 것을 정한 척
+     적어 두면 나중에 바꿀 때 그것이 값 인상으로 읽힌다. -->
+<section id="pricing" class="tint">
+  <div class="wrap center">
+    <p class="eyebrow">Pricing</p>
     <h2>One price. Every model.</h2>
-    <div class="plans">
-      <div class="plan pick">
+    <p class="lede2">Free while in early access — and free stays free for the people who help build it.</p>
+    <div class="plans" style="text-align: left">
+      <div class="card pick">
         <h3>Early access</h3>
-        <div class="price">Free <span>· while in early access</span></div>
+        <div class="price">Free <span>· by invitation</span></div>
         <ul>
           <li>Every model, no API key</li>
           <li>Browser control and workflows</li>
           <li>No card, no trial clock</li>
         </ul>
       </div>
-      <div class="plan">
+      <div class="card">
         <h3>Personal</h3>
         <div class="price">$10 <span>/ month</span></div>
         <ul>
@@ -282,7 +361,7 @@
         </ul>
         <p class="soon">Not live yet — payments are being set up.</p>
       </div>
-      <div class="plan">
+      <div class="card">
         <h3>Team</h3>
         <div class="price">—</div>
         <ul>
@@ -293,77 +372,48 @@
       </div>
     </div>
     <p class="fine">
-      Bring your own API key instead, if you prefer — heybriz works with your own
-      Anthropic, OpenAI or Gemini key, and with a model running on your own PC.
+      Bring your own API key instead, if you prefer — heybriz works with your own Anthropic,
+      OpenAI or Gemini key, and with a model running on your own PC.
     </p>
-  </section>
+  </div>
+</section>
 
-  <section id="status">
-    <div class="rule"><span class="label">Where it is today</span></div>
-    <div class="cols">
-      <div>
-        <span class="label" style="display:block;margin-bottom:10px;">Works now</span>
-        <ul class="set can">
-          <li><span class="m">✓</span><span>Voice input — push to talk, transcribed on your PC</span></li>
-          <li><span class="m">✓</span><span>Searches the web and reads the results — read-only, so it never asks</span></li>
-          <li><span class="m">✓</span><span>Teach it a task by doing it once in the browser</span></li>
-          <li><span class="m">✓</span><span>Drives your logged-in Chrome — click, type, upload, download</span></li>
-          <li><span class="m">✓</span><span>ChatGPT, Claude and Gemini, switch per message</span></li>
-          <li><span class="m">✓</span><span>Documents and sheets, saved as real files on your PC</span></li>
-        </ul>
-      </div>
-      <div>
-        <span class="label" style="display:block;margin-bottom:10px;">Coming soon</span>
-        <ul class="set soon">
-          <li><span class="m">→</span><span>The $10 plan — payments are being set up</span></li>
-          <li><span class="m">→</span><span>Turning a chat run into a workflow, without demonstrating it</span></li>
-          <li><span class="m">→</span><span>Driving Windows apps, not just the browser</span></li>
-          <li><span class="m">→</span><span>macOS</span></li>
-        </ul>
-      </div>
+<!-- 신청. **다운로드 버튼 대신 여기가 유일한 입구다.** 신청을 받으면 직접
+     링크를 보내고 설치와 첫 작업을 1:1 로 돕는다. -->
+<section id="back">
+  <div class="wrap">
+    <div class="cta">
+      <p class="eyebrow" style="color: var(--brand-2)">Early access</p>
+      <h2>Bring me the chore you're tired of</h2>
+      <p>
+        Tell me what you'd hand off tomorrow. I'll send you the download link myself and walk you
+        through setting it up and running your first one — that conversation is the part I actually
+        want.
+      </p>
+      <!-- Formspree. 정적 사이트라 서버가 없고, 이메일 한 칸을 받는 데
+           백엔드를 세울 이유가 없다.
+           _subject 는 받은편지함에서 다른 메일과 섞이지 않게 하는 값이다 —
+           신청은 곧바로 답장해야 하는 것이라 눈에 띄어야 한다. -->
+      <form class="signup" method="POST" action="https://formspree.io/f/mwleajbg">
+        <input type="email" name="email" placeholder="you@wherever.com" aria-label="Email address" required>
+        <input type="hidden" name="_subject" value="heybriz early access request">
+        <button class="btn" type="submit">Request access</button>
+      </form>
+      <p class="fine">Windows 10/11. I read every reply.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section>
-    <div class="rule"><span class="label">Being honest</span></div>
-    <h2>What could go wrong</h2>
-
-    <div class="risk">
-      <h3>I'm one person</h3>
-      <p>The fast turnaround only works at small numbers, which is why early access is small.</p>
-    </div>
-    <div class="risk">
-      <h3>$10 is metered, not unlimited</h3>
-      <p>It's credits you spend across the three models. Heavy days mean topping up.</p>
-    </div>
-    <div class="risk">
-      <h3>Browser control needs a Chrome extension</h3>
-      <p>You install it yourself. Everything else still works without it.</p>
-    </div>
-  </section>
-
-  <section id="back">
-    <div class="rule"><span class="label">Early access</span></div>
-    <h2>Bring me the chore you're tired of</h2>
-    <p class="dek">Free while in early access. Tell me what you'd hand off tomorrow — that's the part I actually want to read.</p>
-
-    <!-- TODO: point action= at a real endpoint (Formspree / Buttondown / our own /api/waitlist). -->
-    <form class="signup" method="POST" action="#" onsubmit="return false;">
-      <input type="email" name="email" placeholder="you@wherever.com" aria-label="Email address" required />
-      <button class="btn" type="submit">Request access</button>
-    </form>
-    <p class="fine">Windows 10/11. I'll email you a download link, and I read every reply.</p>
-  </section>
-
-  <footer>
-    <span class="label">heybriz · a solo project</span>
+<footer>
+  <div class="wrap" style="display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; width: 100%">
+    <span>heybriz · a solo project</span>
     <span>
       <!-- Chrome 웹스토어가 개인정보 처리방침 URL 을 필수로 요구한다
            (debugger 권한이라 더 엄격하다). 링크가 사이트 어딘가에 실제로
            걸려 있어야 심사에서 "찾을 수 없다" 로 반려되지 않는다. -->
-      <a class="label" href="/privacy">Privacy</a>
+      <a href="/privacy">Privacy</a>
       &nbsp;·&nbsp;
-      <a class="label" href="mailto:hello@heybriz.com">hello@heybriz.com</a>
+      <a href="mailto:hello@heybriz.com">hello@heybriz.com</a>
     </span>
-  </footer>
-</div>
+  </div>
+</footer>
