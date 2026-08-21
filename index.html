@@ -1,4 +1,4 @@
-<title>heybriz — Tell your computer what to do</title>
+<title>heybriz: Tell your computer what to do</title>
 <!-- **이게 없으면 모바일이 화면을 980px 로 가정하고 데스크톱 판을 축소해서
      보여준다.** CSS 의 미디어 쿼리·clamp 가 전부 무의미해진다 — 실제로 그렇게
      나갔다(privacy.html 에는 있는데 index.html 만 빠져 있었다).
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- The one-liner IS the title tag: it is what shows in search results and
      browser tabs, so the positioning line has to live here, not only in the h1. -->
-<meta name="description" content="heybriz is a voice-first AI assistant for Windows. Say what you need — it searches, clicks and types in the Chrome you're already signed into, and shows you the plan before anything changes.">
+<meta name="description" content="heybriz is a voice-controlled AI assistant for Windows that can search, click, type, and complete tasks in your browser. Just say what you want. Watch it get done.">
 <style>
   :root {
     --ground: #ffffff; --panel: #f7f7fb; --deep: #0d0e14; --deep-2: #171926;
@@ -155,7 +155,13 @@
     grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   }
   .cell { text-align: center; }
-  .cell .ic { font-size: 25px; line-height: 1; display: block; margin-bottom: 14px; }
+  /* 선 아이콘. 이모지는 OS 마다 다른 그림이 나오고 색을 못 정한다 —
+     currentColor 를 쓰는 SVG 라야 브랜드 색으로 통일된다.
+     Emoji render differently per OS and cannot take the brand colour. */
+  .cell .ic { display: block; margin: 0 0 14px; color: var(--brand); }
+  /* 가운데로 보내는 것은 **안쪽 svg** 다. .ic 는 전체 폭 블록이라
+     margin:auto 가 아무 일도 하지 않는다. */
+  .cell .ic svg { display: block; width: 26px; height: 26px; margin: 0 auto; }
   .cell h3 { font-size: 16.5px; font-weight: 640; margin: 0 0 6px; letter-spacing: -0.01em; }
   .cell p { color: var(--ink-2); font-size: 14.5px; margin: 0; }
 
@@ -296,8 +302,9 @@
     <span class="pill">AI Assistant for Your Browser</span>
     <h1>Tell your computer.<br><span class="grad">heybriz</span> gets it done.</h1>
     <p class="lede">
-      Speak naturally. heybriz understands what you want and works across the web
-      for you - searching, clicking, typing, filling forms, and more.
+      heybriz is a voice-controlled AI assistant for Windows that can search, click,
+      type, and complete tasks in your browser.<br />
+      Just say what you want. Watch it get done.
     </p>
 
     <div class="actions">
@@ -308,7 +315,7 @@
     <!-- 지킬 수 있는 것만. "Takes seconds to start" 류는 설치가 SmartScreen 을
          지나야 하는 지금 사실이 아니다. -->
     <ul class="facts">
-      <li><span class="tick">✓</span> Works in your own browser</li>
+      <li><span class="tick">✓</span> Works in the Chrome you're already signed into</li>
       <li><span class="tick">✓</span> Shows the plan before it acts</li>
       <li><span class="tick">✓</span> Windows 10/11</li>
     </ul>
@@ -324,32 +331,32 @@
     <h2>From simple tasks to complex workflows, <span class="grad">heybriz</span> handles it for you.</h2>
     <div class="grid">
       <div class="cell">
-        <span class="ic">🔍</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-3.6-3.6"/></svg></span>
         <h3>Search &amp; find</h3>
         <p>Reads the pages itself and tells you where each part came from.</p>
       </div>
       <div class="cell">
-        <span class="ic">✍️</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h5"/><path d="M13.5 17.5l2 2 3.5-3.5"/></svg></span>
         <h3>Fill forms</h3>
         <p>Fills long forms and applications. You press the final button.</p>
       </div>
       <div class="cell">
-        <span class="ic">⚖️</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M7 20h10"/><path d="M4 8h16"/><path d="M4 8l-2 5a3 3 0 0 0 6 0z"/><path d="M20 8l-2 5a3 3 0 0 0 6 0z"/></svg></span>
         <h3>Compare &amp; shortlist</h3>
         <p>Prices, options, listings — gathered and lined up side by side.</p>
       </div>
       <div class="cell">
-        <span class="ic">📥</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M8 11l4 4 4-4"/><path d="M4 18v2h16v-2"/></svg></span>
         <h3>Fetch documents</h3>
         <p>Statements and forms from behind your logins, downloaded for you.</p>
       </div>
       <div class="cell">
-        <span class="ic">🔁</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10a6 6 0 0 1 6-6h8"/><path d="M15 1l3 3-3 3"/><path d="M20 14a6 6 0 0 1-6 6H6"/><path d="M9 23l-3-3 3-3"/></svg></span>
         <h3>Repeat a chore</h3>
         <p>Show it once. After that it's one sentence, every time.</p>
       </div>
       <div class="cell">
-        <span class="ic">📄</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span>
         <h3>Keep the result</h3>
         <p>Notes and tables saved as real files on your PC.</p>
       </div>
@@ -371,7 +378,7 @@
       <div class="step">
         <span class="n">2</span>
         <h3>heybriz shows the plan</h3>
-        <p>You see what it intends to do — and which sites it will touch — before anything moves.</p>
+        <p>You see what it intends to do, and which sites it will touch, before anything moves.</p>
         <div class="plan">
           <div class="ttl">Plan</div>
           <ul>
@@ -391,7 +398,7 @@
           <ul>
             <li>Searching flights</li>
             <li>Comparing prices</li>
-            <li>Found 12 options</li>
+            <li>Checking non-stop options</li>
           </ul>
         </div>
       </div>
@@ -399,7 +406,7 @@
         <span class="n">4</span>
         <h3>You get the answer</h3>
         <p>With the assumptions it made, so you know what the number means.</p>
-        <div class="quote">Cheapest non-stop: <b>$487</b>, Air Premia, Sat 01:00 — one-way, since you did not give a return date.</div>
+        <div class="quote">Cheapest non-stop: <b>$500</b>, Air Premia, Sat 01:00. One-way, since you did not give a return date.</div>
       </div>
     </div>
   </div>
@@ -415,19 +422,15 @@
       <p class="eyebrow">Privacy by design</p>
       <h2>Your browser. Your accounts.<br>Your screen stays yours.</h2>
       <p>
-        heybriz runs on your own PC and drives the browser you already use. Your files and the
-        pages it reads for you are not kept on our servers, and it never touches your saved
-        passwords, cookies or session tokens.
+        heybriz runs on your own PC and drives the browser you already use. It never touches
+        your saved passwords, cookies or session tokens.
       </p>
       <ul>
-        <li><span class="tick">✓</span> Signing, payment and deletion are refused in code — not by asking the model nicely</li>
-        <li><span class="tick">✓</span> Account, card and ID numbers are masked before anything is stored</li>
+        <li><span class="tick">✓</span> Signing, payment and deletion are refused by design, not by asking the model nicely</li>
+        <li><span class="tick">✓</span> Account, card and ID numbers are masked</li>
         <li><span class="tick">✓</span> Your pages, files and screenshots are never stored on our servers</li>
-        <li><span class="tick">✓</span> Chrome shows a banner the whole time it can act — you can stop it there</li>
+        <li><span class="tick">✓</span> Chrome shows a banner the whole time it can act, and you can stop it there</li>
       </ul>
-      <p style="margin-top: 22px">
-        <a href="/privacy">Read exactly what we store →</a>
-      </p>
     </div>
   </div>
 </section>
@@ -443,9 +446,9 @@
 <section id="pricing" class="tint">
   <div class="wrap center">
     <p class="eyebrow">Pricing</p>
-    <h2>Free while in early access.<br>Top up when you need more.</h2>
+    <h2>Free credits to start.<br>Top up when you need more.</h2>
     <p class="lede2">
-      Credits only, no subscription — a monthly plan is coming once heybriz is out
+      Credits only, no subscription. A monthly plan is coming once heybriz is out
       of early access.
     </p>
     <div class="plans" style="text-align: left">
@@ -469,7 +472,7 @@
           <li>$10 → 10,000 credits</li>
           <li>$25 → 25,000 credits</li>
           <li>$50 → 50,000 credits</li>
-          <li>Valid 12 months, tax included</li>
+          <li>Valid 12 months</li>
         </ul>
       </div>
     </div>
@@ -485,7 +488,7 @@
       <h2>Bring me the chore you're tired of</h2>
       <p>
         Tell me what you'd hand off tomorrow. I'll send you the download link myself and walk you
-        through setting it up and running your first one — that conversation is the part I actually
+        through setting it up and running your first one. That conversation is the part I actually
         want.
       </p>
       <!-- Formspree. 정적 사이트라 서버가 없고, 이메일 한 칸을 받는 데
