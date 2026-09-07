@@ -263,6 +263,36 @@
     font-size: 14px; color: var(--ink-2);
   }
   footer a { color: var(--ink-2); }
+  /* 자주 묻는 것. **<details> 를 쓴다 — JS 없이 접히고, 키보드로 열리고,
+     닫혀 있어도 본문이 DOM 에 있어 검색에 잡힌다.** 정적 사이트에 아코디언
+     하나 때문에 스크립트를 들일 이유가 없다.
+     A native accordion: no JS, keyboard-operable, and the answers stay in the
+     DOM (and in search results) even while collapsed. */
+  .faq { max-width: 720px; margin: 0 auto; text-align: left; }
+  .faq details { border-top: 1px solid var(--rule); }
+  .faq details:last-of-type { border-bottom: 1px solid var(--rule); }
+  .faq summary {
+    display: flex; align-items: baseline; gap: 14px; justify-content: space-between;
+    padding: 20px 2px; cursor: pointer; font-weight: 640; font-size: 17.5px;
+    letter-spacing: -0.015em; list-style: none;
+  }
+  /* 사파리는 ::marker 대신 이 가상요소로 삼각형을 그린다. 둘 다 꺼야 한다. */
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::marker { content: ""; }
+  /* +/− 는 **글자가 아니라 그린 선이다** — 폰트에 따라 −(U+2212)가 빠지면
+     빈칸이 되어 열고 닫는 단서가 통째로 사라진다. */
+  .faq .pm { position: relative; flex: 0 0 14px; height: 14px; align-self: center; }
+  .faq .pm::before, .faq .pm::after {
+    content: ""; position: absolute; inset: 0; margin: auto;
+    background: var(--brand); border-radius: 1px;
+  }
+  .faq .pm::before { width: 14px; height: 2px; }
+  .faq .pm::after { width: 2px; height: 14px; transition: transform 0.18s ease; }
+  .faq details[open] .pm::after { transform: rotate(90deg); }
+  .faq summary:hover { color: var(--brand); }
+  .faq .a { color: var(--ink-2); margin: 0; padding: 0 34px 22px 2px; max-width: 62ch; }
+  .faq .a + .a { padding-top: 0; }
+  @media (prefers-reduced-motion: reduce) { .faq .pm::after { transition: none; } }
 </style>
 
 <div class="topbar">
@@ -476,6 +506,84 @@
           <li>Valid 12 months</li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- 자주 묻는 것. **요금 다음, 신청 바로 앞이다** — 여기 오는 물음은
+     마지막 망설임이라, 답을 읽자마자 신청 칸이 나와야 한다.
+     내용 규칙은 프라이버시 절과 같다: /privacy 와 어긋나는 말은 안 쓴다.
+     Placed between price and signup because these are the last objections. -->
+<section id="faq">
+  <div class="wrap center">
+    <p class="eyebrow">Questions</p>
+    <h2>The things people ask me first</h2>
+    <div class="faq">
+      <!-- 첫 하나는 열어 둔다. 전부 닫혀 있으면 접히는 목록인 줄 모르고 지나간다. -->
+      <details open>
+        <summary>How is this different from ChatGPT or Claude?<span class="pm"></span></summary>
+        <p class="a">
+          They work in a sandbox of their own, with no way into the accounts you are signed in to.
+          heybriz drives the Chrome you already use — so it can work inside your bank, your CRM,
+          your county's permit portal. That is where the chores actually are.
+        </p>
+      </details>
+      <details>
+        <summary>Do I have to give it my passwords?<span class="pm"></span></summary>
+        <p class="a">
+          No, and there is nowhere to type one. heybriz acts on tabs you are already signed in to.
+          It does not read, copy, or transmit your saved passwords, cookies, or session tokens.
+          If a site signs you out, you sign back in yourself.
+        </p>
+      </details>
+      <details>
+        <summary>Where does it actually run?<span class="pm"></span></summary>
+        <p class="a">
+          On your PC. The clicking, typing and reading happen in your own browser, on your own
+          machine — your screen is never streamed anywhere for something else to drive.
+        </p>
+        <p class="a">
+          What does leave: what you asked for, and the text of the pages the task needs, sent to
+          the model provider so it can work out the next step.
+          <a href="/privacy">Privacy</a> lists exactly which parts. Choose a local model and even
+          that stays on your machine.
+        </p>
+      </details>
+      <details>
+        <summary>What happens when it gets something wrong?<span class="pm"></span></summary>
+        <p class="a">
+          You see the plan before anything moves, and you can stop it mid-run. Something it has
+          never done before asks you at every step; it earns quieter runs only after you have
+          watched it work. Signing, paying and deleting are refused in the code — not by asking
+          the model nicely.
+        </p>
+      </details>
+      <details>
+        <summary>What does a credit actually buy?<span class="pm"></span></summary>
+        <p class="a">
+          A credit is a tenth of a cent. A heavy browser job — open a site, work through several
+          pages, write the result up — lands around 600 credits, so $10 covers roughly fifteen of
+          those. A plain question costs a small fraction of one. Credits are good for 12 months.
+        </p>
+      </details>
+      <details>
+        <summary>What do I need to run it?<span class="pm"></span></summary>
+        <p class="a">
+          Windows 10 or 11, and Chrome 116 or newer — the Chrome side is a small extension you
+          install once. No Mac version yet. If that is the thing stopping you, say so below and
+          I will count you.
+        </p>
+      </details>
+      <!-- 이 항목이 이 절의 이유다. 위의 여섯은 망설임을 없애고, 이건 **말을
+           걸게 만든다** — 초기 접근에서 얻고 싶은 것이 그거다. -->
+      <details>
+        <summary>What if it cannot do the thing I need?<span class="pm"></span></summary>
+        <p class="a">
+          Tell me what it is. Early access is small on purpose: I read every message, and most of
+          what I build next is something someone asked for by name. If it is close, I will usually
+          build it. If it is not, I would rather say so than take your money.
+        </p>
+      </details>
     </div>
   </div>
 </section>
