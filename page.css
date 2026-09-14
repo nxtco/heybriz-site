@@ -45,3 +45,21 @@ b, strong { color: var(--ink); font-weight: 620; }
 .box { background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--signal); border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 0 0 12px; }
 .box p:last-child { margin-bottom: 0; }
 footer { margin-top: 56px; border-top: 1px solid var(--rule); padding: 20px 0 50px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* 번호 목록. 여태 없었는데 /download 가 "설치 뒤에 할 일"을 순서로 말한다 —
+   순서가 뜻을 갖는 곳이라 ul 로 쓸 수 없다. ul 과 같은 여백을 준다. */
+ol { margin: 0 0 12px; padding-left: 20px; }
+ol li { margin-bottom: 6px; }
+
+/* 내려받기 단추. 이 페이지에 사람이 누를 것은 이것 하나뿐이라, 본문 링크와
+   같은 모양이면 안 된다 — 찾느라 페이지를 읽게 만들면 안 된다.
+   글자색은 --panel 이다: 밝은 판에서는 흰 글자, 어두운 판에서는 짙은 글자가
+   되어 양쪽 다 주황 위에서 읽힌다. */
+.dl-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 0 0 22px; }
+.dl {
+  background: var(--signal); color: var(--panel);
+  font-size: 16px; font-weight: 620; text-decoration: none;
+  padding: 13px 26px; border-radius: 8px; white-space: nowrap;
+}
+.dl:hover { filter: brightness(1.08); }
+.dl:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
