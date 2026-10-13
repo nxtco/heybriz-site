@@ -1,0 +1,124 @@
+<meta charset="utf-8" />
+<title>Privacy Policy — heybriz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/page.css" />
+
+<div class="wrap">
+  <div class="bar">
+    <a class="brand" href="/">hey<b>briz</b></a>
+    <a class="label" href="/">← Back</a>
+  </div>
+
+  <h1>Privacy Policy</h1>
+  <p class="stamp">Last updated: 2026-09-06</p>
+
+  <p>
+    heybriz is a desktop assistant that operates your web browser on your instruction.
+    This policy explains what the desktop application and its Chrome extension do with your data.
+  </p>
+
+  <h2>What the Chrome extension collects</h2>
+  <div class="box">
+    <p>
+      <b>Nothing.</b> The extension does not send any data to us or to any third party.
+      It has no analytics, no telemetry, and no remote endpoint. Its only network connection is a
+      WebSocket to <b>127.0.0.1</b> — your own computer — where the heybriz desktop application is
+      listening. That connection is refused until you copy a pairing code from the desktop
+      application into the extension.
+    </p>
+  </div>
+
+  <h2>What passes through your computer</h2>
+  <p>
+    To carry out a task you give it, the assistant needs to see the page you asked it to work on.
+    The extension reads the structure and text of that tab and passes it to the heybriz desktop
+    application over the local connection described above. The desktop application then sends that
+    content to the AI model provider so the model can decide what to do next.
+  </p>
+  <p>
+    This means: <b>page content from tabs you direct the assistant to is sent to the model provider.</b>
+    The assistant acts on the tab you targeted for the current task, not on your browsing generally.
+  </p>
+
+  <h2>Model providers</h2>
+  <p>
+    Depending on your settings, the model provider is Anthropic, OpenAI, Google, or a model running
+    locally on your own machine. When a local model is selected, your content is not sent to any
+    model provider. Providers process this content under their own terms.
+  </p>
+
+  <h2>What we store on our servers</h2>
+  <p>If you use a heybriz account, we store:</p>
+  <ul>
+    <li><b>Account information</b> — your email address and credit balance. Payments are processed
+      by Creem, our merchant of record; we never see or store your card details.</li>
+    <li><b>Your requests and the assistant's activity</b> — the text of what you ask, each action
+      the assistant takes while carrying it out (with that action's inputs and outputs, which can
+      include the content of pages it reads for your task), and the assistant's replies. If a
+      future version captures screenshots as part of a task, those will be stored the same way
+      and this policy will say so before that ships.</li>
+    <li><b>Usage records</b> — timestamp, model name, token counts, and technical events about how
+      each request went: how long it took, how many actions ran, and whether it failed.</li>
+    <li><b>Workflows you record</b> — the structure of a workflow you save: its steps, what each
+      step is for, and how each step finds the thing it acts on. We also store how a workflow
+      runs: whether it succeeded, which step failed or had to be repaired, and how long it took.
+      The values you type while recording — names, numbers, addresses — are not sent to us; they
+      stay on your computer.</li>
+  </ul>
+  <p>
+    Long runs of digits (such as account or ID numbers) are masked before anything is stored.
+    We use this data to operate and secure the service, to debug failures, and to improve
+    heybriz, including training and improving our own models.
+  </p>
+
+  <h2>What stays on your computer</h2>
+  <p>
+    Your files, your local search index, any API keys you enter, and the values you type while
+    recording a workflow are stored on your own machine.
+    API keys are encrypted using your operating system's credential store. Documents you create are
+    stored in your heybriz account so you can reach them from any computer.
+  </p>
+
+  <h2>Credentials and sessions</h2>
+  <p>
+    heybriz acts on tabs you are already signed in to. It does not read, copy, or transmit your
+    saved passwords, cookies, or session tokens.
+  </p>
+
+  <h2>Retention and deletion</h2>
+  <p>
+    We retain this data for as long as necessary to provide and improve our Services, and as
+    required by applicable law. You can request deletion of your account and its records by
+    contacting us at the address below.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    heybriz is for adults. Our <a href="/terms"><b>Terms</b></a> require you to be at least 18,
+    and we do not knowingly collect data from anyone under 18. If you believe a minor has given
+    us data, write to <a href="mailto:hello@heybriz.com">hello@heybriz.com</a> and we will
+    delete it.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    We will update the date above when this policy changes, and will notify account holders of
+    material changes by email.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    heybriz is operated by <b>Shukream</b>, a sole proprietorship registered in the Republic of
+    Korea (business registration number 744-24-01992), which is responsible for the data
+    described in this policy.
+  </p>
+  <p><a href="mailto:hello@heybriz.com">hello@heybriz.com</a></p>
+
+  <footer>
+    <span class="label">heybriz · a solo project</span>
+    <span class="label">
+      <a href="/terms">Terms</a> · <a href="/refund">Refunds</a> · <a href="/support">Support</a> ·
+      <a href="mailto:hello@heybriz.com">hello@heybriz.com</a>
+    </span>
+  </footer>
+</div>

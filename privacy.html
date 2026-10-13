@@ -10,41 +10,60 @@
   </div>
 
   <h1>Privacy Policy</h1>
-  <p class="stamp">Last updated: 2026-09-06</p>
+  <p class="stamp">Last updated: 2026-10-14</p>
 
   <p>
-    heybriz is a desktop assistant that operates your web browser on your instruction.
-    This policy explains what the desktop application and its Chrome extension do with your data.
+    heybriz is a Chrome extension that operates the tab you are on, on your instruction.
+    This policy explains what it does with your data.
   </p>
 
-  <h2>What the Chrome extension collects</h2>
+  <h2>What the extension sends</h2>
   <div class="box">
     <p>
-      <b>Nothing.</b> The extension does not send any data to us or to any third party.
-      It has no analytics, no telemetry, and no remote endpoint. Its only network connection is a
-      WebSocket to <b>127.0.0.1</b> — your own computer — where the heybriz desktop application is
-      listening. That connection is refused until you copy a pairing code from the desktop
-      application into the extension.
+      To work out what you asked for, the extension sends three things to heybriz:
+      <b>what you said or typed</b>, the <b>address and title</b> of the tab you are on, and the
+      <b>names of the links, buttons and boxes</b> on that page. It gets back a single action to
+      perform.
+    </p>
+    <p>
+      That is the only server it talks to. The address is fixed in the extension's code — it
+      cannot be pointed anywhere else — and there is no analytics. The one other place anything
+      goes is Chrome's speech recognition, described below, which Chrome does rather than us.
     </p>
   </div>
+  <p>
+    It does not send the full text of the page, images, or anything from tabs other than the one
+    you are working on.
+  </p>
+
+  <h2>What you say</h2>
+  <p>
+    heybriz uses the speech recognition built into Chrome. <b>Chrome sends the recording to
+    Google's speech service</b> to turn it into text, and that service handles it under Google's
+    own terms — this is how speech recognition works in the browser, and it is the same for any
+    site that uses it.
+  </p>
+  <p>
+    <b>heybriz never receives the audio.</b> We only ever see the text that comes back, and only
+    after you press the microphone. Nothing is captured while it is off.
+  </p>
 
   <h2>What passes through your computer</h2>
   <p>
-    To carry out a task you give it, the assistant needs to see the page you asked it to work on.
-    The extension reads the structure and text of that tab and passes it to the heybriz desktop
-    application over the local connection described above. The desktop application then sends that
-    content to the AI model provider so the model can decide what to do next.
+    heybriz reads the tab you are acting on so it can tell what is there to click or type into.
+    It reads that one tab, when you ask for something — not your browsing generally, and not in
+    the background.
   </p>
   <p>
-    This means: <b>page content from tabs you direct the assistant to is sent to the model provider.</b>
-    The assistant acts on the tab you targeted for the current task, not on your browsing generally.
+    This means: <b>the address, title and the names of things on a page you direct heybriz to are
+    sent to our server, and from there to the model provider.</b>
   </p>
 
   <h2>Model providers</h2>
   <p>
-    Depending on your settings, the model provider is Anthropic, OpenAI, Google, or a model running
-    locally on your own machine. When a local model is selected, your content is not sent to any
-    model provider. Providers process this content under their own terms.
+    The model that decides which action to take is <b>Jev</b>, from TypeSafe. It processes this
+    content under its own terms. Speech recognition is a separate step, handled by Chrome and
+    Google as described above — Jev never receives audio.
   </p>
 
   <h2>What we store on our servers</h2>
@@ -52,18 +71,12 @@
   <ul>
     <li><b>Account information</b> — your email address and credit balance. Payments are processed
       by Creem, our merchant of record; we never see or store your card details.</li>
-    <li><b>Your requests and the assistant's activity</b> — the text of what you ask, each action
-      the assistant takes while carrying it out (with that action's inputs and outputs, which can
-      include the content of pages it reads for your task), and the assistant's replies. If a
-      future version captures screenshots as part of a task, those will be stored the same way
-      and this policy will say so before that ships.</li>
+    <li><b>Your requests and what heybriz did</b> — the text of what you asked, the page address
+      and the names of things on it that were sent with it, and the action it decided on. heybriz
+      does not take screenshots; if a future version does, this policy will say so before that
+      ships.</li>
     <li><b>Usage records</b> — timestamp, model name, token counts, and technical events about how
       each request went: how long it took, how many actions ran, and whether it failed.</li>
-    <li><b>Workflows you record</b> — the structure of a workflow you save: its steps, what each
-      step is for, and how each step finds the thing it acts on. We also store how a workflow
-      runs: whether it succeeded, which step failed or had to be repaired, and how long it took.
-      The values you type while recording — names, numbers, addresses — are not sent to us; they
-      stay on your computer.</li>
   </ul>
   <p>
     Long runs of digits (such as account or ID numbers) are masked before anything is stored.
@@ -71,12 +84,10 @@
     heybriz, including training and improving our own models.
   </p>
 
-  <h2>What stays on your computer</h2>
+  <h2>What stays in your browser</h2>
   <p>
-    Your files, your local search index, any API keys you enter, and the values you type while
-    recording a workflow are stored on your own machine.
-    API keys are encrypted using your operating system's credential store. Documents you create are
-    stored in your heybriz account so you can reach them from any computer.
+    Your sign-in token, your language choice and whether replies are read aloud are kept by the
+    extension in Chrome's own storage, on your computer. They are not synced and not sent to us.
   </p>
 
   <h2>Credentials and sessions</h2>
