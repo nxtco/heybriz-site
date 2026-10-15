@@ -241,8 +241,21 @@
   .price { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; }
   .price span { font-size: 14px; font-weight: 400; color: var(--ink-2); }
   .card ul { margin: 16px 0 0; padding-left: 20px; color: var(--ink-2); font-size: 14.5px; line-height: 1.8; }
+  /* 요금 카드마다 "다음 한 걸음" 단추를 둔다. 가격만 적어 두면 사는 자리가
+     어디인지 읽는 사람도, 결제 심사원도 찾을 수 없다. 카드 높이가 달라도
+     단추는 아래에 나란히 붙게 ul 을 늘인다.
+     Each plan card carries its own next step: a price with no button leaves
+     both the reader and a payment reviewer with nowhere to click. */
+  .plans .card { display: flex; flex-direction: column; }
+  .plans .card ul { flex: 1 0 auto; margin-bottom: 22px; }
+  .plans .card .btn { width: 100%; justify-content: center; }
+  /* 흰 카드 위의 보조 단추 — 히어로의 btn-ghost 는 어두운 배경용이라 여기선
+     글자가 사라진다. Light-background twin of .btn-ghost. */
+  .btn-line { background: #fff; color: var(--ink); border-color: var(--rule); }
+  .btn-line:hover { background: var(--panel); }
   .soon { font-family: var(--mono); font-size: 12px; color: var(--ink-2); margin: 14px 0 0; }
   .fine { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); margin: 20px 0 0; max-width: 66ch; }
+  .center .fine { margin-left: auto; margin-right: auto; }
 
   /* 신청 */
   .cta { background: var(--deep); color: var(--on-deep); border-radius: 18px; padding: 44px 40px; }
@@ -453,6 +466,7 @@
           <li>No card, no trial clock</li>
           <li>No API key needed</li>
         </ul>
+        <a class="btn btn-line" href="https://chromewebstore.google.com/detail/heybriz/idfjacocfbmipncjgmgjdlipfhbhdohc">Add to Chrome &mdash; free</a>
       </div>
       <div class="card">
         <h3>Top up</h3>
@@ -462,8 +476,15 @@
           <li>$50 &rarr; 50,000 credits</li>
           <li>Valid 12 months</li>
         </ul>
+        <!-- 계정의 Credits 화면을 바로 연다. 로그인이 안 되어 있으면 로그인
+             화면이 먼저 뜨고, 끝나면 이 화면으로 돌아온다. -->
+        <a class="btn" href="https://api.heybriz.com/docs?view=credits">Sign in to buy credits</a>
       </div>
     </div>
+    <p class="fine">
+      Credits are bought in your heybriz account. Prices are in USD and payments are processed by
+      Creem, our merchant of record. See <a href="/refund">Refunds</a> and <a href="/terms">Terms</a>.
+    </p>
   </div>
 </section>
 
