@@ -55,6 +55,26 @@
   .topbar nav { display: flex; gap: 26px; margin-left: auto; }
   .topbar nav a { text-decoration: none; color: var(--on-deep-2); font-size: 15px; }
   .topbar nav a:hover { color: var(--on-deep); }
+  /* 오른쪽 끝의 두 단추. 메뉴 끝자리에 둬서 어느 절을 읽고 있든 계정으로
+     갈 수 있다 — 요금 절까지 내려가야만 길이 열리면 거기까지 안 내려간
+     사람은 길이 없는 것과 같다.
+     **둘로 나눈다.** 처음 온 사람과 다시 온 사람이 찾는 것이 다르다. 하나뿐이면
+     돌아온 사람이 "Get started" 를 눌러야 로그인이 되고, 그건 자기 자리가
+     없다는 신호로 읽힌다.
+     세로 음수 여백은 단추의 패딩만큼 되돌려 상단 바 높이를 그대로 둔다.
+     Two, not one: a returning user should not have to press "Get started" to
+     reach an account they already have. The negative vertical margin cancels
+     the padding so the bar keeps the height the wordmark gives it. */
+  .topbar nav .signin,
+  .topbar nav .go {
+    border-radius: 8px; padding: 9px 16px; margin: -9px 0; font-weight: 600;
+  }
+  .topbar nav .signin { color: var(--on-deep); border: 1px solid rgba(255, 255, 255, 0.22); }
+  .topbar nav .signin:hover { background: rgba(255, 255, 255, 0.06); }
+  .topbar nav .go { color: #fff; background: var(--brand); }
+  .topbar nav .go:hover { background: var(--brand-2); color: #fff; }
+  /* 나란한 단추 둘은 메뉴 항목 사이(26px)보다 붙어 있어야 한 쌍으로 읽힌다. */
+  .topbar nav .go { margin-left: -14px; }
   /* 닫기 표시와 막은 **모바일 시트 전용**이다. 넓은 화면에서는 메뉴가 늘
      펼쳐져 있으므로 닫을 것이 없다 — 여기서 감추지 않으면 데스크톱 메뉴 끝에
      ✕ 가 하나 더 붙어 보인다(실제로 그렇게 나갔다).
@@ -95,6 +115,10 @@
       border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
     .topbar nav a:first-of-type { border-top: 0; }
+    /* 시트 안에서는 줄 사이의 구분선 대신 아래에 쌓이는 단추 둘로 둔다. */
+    .topbar nav .signin,
+    .topbar nav .go { margin: 10px 0 0; padding: 14px 6px; text-align: center; border-top: 0; }
+    .topbar nav .signin { margin-top: 16px; }
     /* 닫기는 햄버거가 있던 자리에 겹쳐 둔다 — 누른 손가락이 그대로 있는 곳이다. */
     .topbar nav .close {
       display: block; position: absolute; top: 14px; right: 12px;
@@ -323,6 +347,8 @@
            the dashboard — but a menu item that does nothing is still broken. -->
       <a href="/privacy">Privacy</a>
       <a href="#pricing">Pricing</a>
+      <a class="signin" href="https://api.heybriz.com/docs">Sign in</a>
+      <a class="go" href="https://api.heybriz.com/docs?view=credits">Get started</a>
     </nav>
     <!-- 시트 밖을 눌러 닫는 막. 시트와 형제로 두어야 z-index 가 시트 아래에
          깔린다. Sibling so it stacks under the sheet, not over it. -->
@@ -478,7 +504,7 @@
         </ul>
         <!-- 계정의 Credits 화면을 바로 연다. 로그인이 안 되어 있으면 로그인
              화면이 먼저 뜨고, 끝나면 이 화면으로 돌아온다. -->
-        <a class="btn" href="https://api.heybriz.com/docs?view=credits">Sign in to buy credits</a>
+        <a class="btn" href="https://api.heybriz.com/docs?view=credits">Get started</a>
       </div>
     </div>
     <p class="fine">
